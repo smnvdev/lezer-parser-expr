@@ -1,5 +1,5 @@
 {
-  "name": "expr-parser",
+  "name": "lezer-expr",
   "version": "1.0.0",
   "description": "Lezer-based Expr grammar",
   "main": "dist/index.cjs",
