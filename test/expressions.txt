@@ -1,0 +1,100 @@
+# Call expressions
+
+upper("hello")
+
+==>
+
+Expr(CallExpr(VarName, Arguments(String)))
+
+# Call with predicate expression
+
+filter(0..9, {# % 2 == 0})
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      RangeExpr(Number, Number),
+      Predicate(
+        BinaryExpr(
+          BinaryExpr(Pointer, ArithmeticOp, Number),
+          CompareOp,
+          Number
+        )
+      )
+    )
+  )
+)
+
+# Nested call expressions
+
+a(b(c(d)))
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      CallExpr(
+        VarName,
+        Arguments(
+          CallExpr(
+            VarName,
+            Arguments(VarName)
+          )
+        )
+      )
+    )
+  )
+)
+
+# Call with omitted pointer
+
+filter(tweets, {len(.Content) > 240})
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      VarName,
+      Predicate(
+        BinaryExpr(
+          CallExpr(
+            VarName,
+            Arguments(PointerSelectorExpr(FieldName))
+          ),
+          CompareOp,
+          Number
+        )
+      )
+    )
+  )
+)
+
+# Call without predicate
+
+filter(tweets, len(.Content) > 240)
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      VarName,
+      BinaryExpr(
+        CallExpr(
+          VarName,
+          Arguments(PointerSelectorExpr(FieldName))
+        ),
+        CompareOp,
+        Number
+      )
+    )
+  )
+)

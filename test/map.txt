@@ -1,0 +1,41 @@
+# Empty map
+
+{ }
+
+==>
+
+Expr(Map())
+
+# One Property
+
+{
+  "foo": 123
+}
+
+==>
+
+Expr(Map(Pair(String,Number)))
+
+# Multiple Properties
+
+{
+  "foo": 123,
+  "bar": "I'm a bar!",
+  "obj": {},
+  "arr": [1, 2, 3],
+  1: 1,
+  1.2: 1.2,
+  iddqd: 0xFF
+}
+
+==>
+
+Expr(Map(
+  Pair(String, Number),
+  Pair(String, String),
+  Pair(String, Map()),
+  Pair(String, Array(Number, Number, Number)),
+  Pair(Number, Number),
+  Pair(Number, Number),
+  Pair(FieldName, Number)
+))

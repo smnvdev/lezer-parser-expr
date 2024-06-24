@@ -1,0 +1,108 @@
+# Int literals
+
+let i1 = 42;
+let i2 = 4_2;
+let i3 = 0600;
+let i4 = 0_600;
+let i5 = 0o600;
+let i6 = 0O600;
+let i7 = 0xBadFace;
+let i8 = 0xBad_Face;
+let i9 = 0x_67_7a_2f_cc_40_c6;
+let i10 = 170141183460469231731687303715884105727;
+let i11 = 170_141183_460469_231731_687303_715884_105727;
+
+nil
+
+==>
+
+Expr(
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  VarDecl(let, VarName, Number),
+  Nil(nil))
+
+# Float literals
+
+let f1 = 0.;
+let f2 = 72.40;
+let f3 = 072.40;
+let f4 = 2.71828;
+let f5 = 1.e+0;
+let f6 = 6.67428e-11;
+let f7 = 1E6;
+let f8 = .25;
+let f9 = .12345E+5;
+let f10 = 1_5.;
+let f11 = 0.15e+0_2;
+
+nil
+
+==>
+
+Expr(
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  VarDecl(let,VarName,Number),
+  Nil(nil))
+
+# String literals
+
+let a = "0";
+let b = "`\"`";
+let c = "\x0c";
+let d = "errorstring
+  "
+
+==>
+
+Expr(
+  VarDecl(let,VarName,String),
+  VarDecl(let,VarName,String),
+  VarDecl(let,VarName,String),
+  VarDecl(let,VarName,String, ⚠),
+  String)
+
+# Array literals
+
+let a1 = [];
+let a2 = ["hi"];
+let s3 = ["hi", "hello", 228];
+
+==>
+
+Expr(
+  VarDecl(let,VarName,Array()),
+  VarDecl(let,VarName,Array(String)),
+  VarDecl(let,VarName,Array(String, String, Number)))
+
+
+# Map literals
+
+let s = {"hi": "hello", "bye": false, 1: []};
+
+==>
+
+Expr(
+  VarDecl(let,VarName,Map(
+    Pair(String, String),
+    Pair(String, Bool),
+    Pair(Number, Array())
+  )))
+

@@ -1,0 +1,132 @@
+@precedence {
+  unary
+  mult @left
+  add @left
+  compare @left
+  and @left
+  or @left
+  range @left
+
+  dot
+  index
+  slice
+
+  call
+  pipe
+  ternary @right
+}
+
+@top Expr { VarDecl* expr* }
+
+@skip { space | LineComment | BlockComment }
+
+VarName { identifier ~identifier }
+
+FieldName { identifier ~identifier }
+
+VarDecl { kw<"let"> VarName "=" expr ";" }
+
+expr {
+  Number |
+  String |
+  Bool { @specialize<identifier, "true" | "false"> } |
+  Nil { kw<"nil"> } |
+
+  VarName |
+  SelectorExpr { expr !dot ~dot "." FieldName } |
+  OptionalSelectorExpr { expr "?." FieldName } |
+
+  Pointer |
+  PointerSelectorExpr { !dot ~dot "." FieldName } |
+
+  ParenthesizedExpr |
+
+  Array { "[" commaSep<expr> "]" } |
+  Map { "{" commaSep<Pair> "}" } |
+
+  IndexExpr { expr !index ~bracket "[" expr "]" } |
+  SliceExpr { expr !slice ~bracket "[" expr? ":" expr? "]" } |
+  RangeExpr { expr !range ~range range expr } |
+
+  CallExpr  { expr !call Arguments } |
+  PipeExpr  { expr !pipe ~pipe "|" expr } |
+
+  UnaryExpr {(ArithmeticOp<"+" | "-"> | LogicOp<"!" | kw<"not">>) !unary expr} |
+  BinaryExpr {
+    expr !mult ArithmeticOp<"*" | "/" | "%" | "^" | "**"> expr |
+    expr !add ArithmeticOp<"+" | "-"> expr |
+    expr !compare CompareOp<
+      "==" | "!=" | "<" | "<=" | ">" | ">=" |
+      kw<"in"> | kw<"contains"> | kw<"startsWith"> | kw<"endsWith"> | kw<"matches">
+    > expr |
+    expr !and LogicOp<"&&" | kw<"and">> expr |
+    expr !or LogicOp<"||" | "??" | kw<"or">> expr
+  } |
+
+  ConditionalExpr { expr !ternary "?" expr LogicOp<":"> expr }
+}
+
+ParenthesizedExpr { "(" expr ")" }
+
+Pair { (String | Number | FieldName | ParenthesizedExpr) ":" expr }
+
+Arguments { "(" commaSep<expr | Predicate> ")" }
+Predicate { "{" VarDecl* expr "}" }
+
+kw<term> { @specialize[@name={term}]<identifier, term> }
+
+commaSep<expr> { (expr ("," expr)*)? ","? }
+
+LogicOp<expr> { expr }
+ArithmeticOp<expr> { expr }
+CompareOp<expr> { expr }
+
+@local tokens {
+  blockCommentEnd { "*/" }
+  blockCommentNewline { "\n" }
+  @else blockCommentContent
+}
+
+@skip {} {
+  BlockComment[isolate] { "/*" (blockCommentContent | blockCommentNewline)* blockCommentEnd }
+}
+
+
+@external tokens operatorToken from "./tokens.js" { range }
+
+@tokens {
+  space { $[ \t\n\r]+ }
+  LineComment[isolate] { "//" ![\n]* }
+  @precedence { LineComment "/" }
+
+  Pointer { "#" }
+
+  digits { @digit ("_"? @digit)* }
+
+  decimalNumber { ("." digits | digits ("." digits?)?) ($[eE] $[+-]? digits)? }
+  hexNumber { "0" $[xX] ("_"? (@digit | $[a-fA-F]))+ }
+  octNumber { "0" $[oO] ("_"? $[0-7])+ }
+  binNumber { "0" $[bB] ("_"? $[01])+ }
+  Number { (decimalNumber | hexNumber | octNumber | binNumber) }
+
+  String[isolate] {
+    "'" ("\\" _ | ![\\'\n])* "'"? |
+    '"' ("\\" _ | ![\\"\n])* '"'? |
+    '`' ![`]* '`'
+  }
+
+  letter { $[_a-zA-Z\u{a1}-\u{10ffff}] }
+  identifier { letter (letter | @digit)* }
+
+  @precedence { Number identifier }
+  @precedence { Number "." }
+
+  "=" ";" ":" ".." "." "?." "," "~" "|"
+  "(" ")"
+  "{" "}"
+  "[" "]"
+}
+
+@external propSource exprHighlighting from "./highlight.js"
+
+@detectDelim

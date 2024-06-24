@@ -1,0 +1,34 @@
+# Empty Array
+
+[]
+
+==>
+
+Expr(Array())
+
+# Array With One Value
+
+["One is the loneliest number"]
+
+==>
+
+Expr(Array(String))
+
+# Array With Multiple Values
+
+[
+  "The more the merrier",
+  1e5,
+  true,
+  { },
+  ["I'm", "nested"]
+]
+
+==>
+
+Expr(Array(
+  String,
+  Number,
+  Bool,
+  Map(),
+  Array(String, String)))
