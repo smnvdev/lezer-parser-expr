@@ -20,11 +20,11 @@
 
 @skip { space | LineComment | BlockComment }
 
+DefName { identifier ~identifier }
 VarName { identifier ~identifier }
-
 FieldName { identifier ~identifier }
 
-VarDecl { kw<"let"> VarName "=" expr ";" }
+VarDecl { kw<"let"> DefName "=" expr ";" }
 
 expr {
   Number |
@@ -99,8 +99,6 @@ CompareOp<expr> { expr }
   LineComment[isolate] { "//" ![\n]* }
   @precedence { LineComment "/" }
 
-  Pointer { "#" }
-
   digits { @digit ("_"? @digit)* }
 
   decimalNumber { ("." digits | digits ("." digits?)?) ($[eE] $[+-]? digits)? }
@@ -117,6 +115,8 @@ CompareOp<expr> { expr }
 
   letter { $[_a-zA-Z\u{a1}-\u{10ffff}] }
   identifier { letter (letter | @digit)* }
+
+  Pointer { "#" identifier? }
 
   @precedence { Number identifier }
   @precedence { Number "." }

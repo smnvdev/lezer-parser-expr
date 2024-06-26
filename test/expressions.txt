@@ -98,3 +98,28 @@ Expr(
     )
   )
 )
+
+# Call with use different pointers
+
+reduce(1..9, #acc + # + #index, 0)
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      RangeExpr(Number, Number),
+      BinaryExpr(
+        BinaryExpr(
+          Pointer,
+          ArithmeticOp,
+          Pointer
+        ),
+        ArithmeticOp,
+        Pointer
+      ),
+      Number
+    )
+  )
+)

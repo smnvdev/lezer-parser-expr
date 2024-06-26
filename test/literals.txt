@@ -17,17 +17,17 @@ nil
 ==>
 
 Expr(
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
-  VarDecl(let, VarName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Number),
   Nil(nil))
 
 # Float literals
@@ -49,17 +49,17 @@ nil
 ==>
 
 Expr(
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
-  VarDecl(let,VarName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Number),
   Nil(nil))
 
 # String literals
@@ -73,10 +73,10 @@ let d = "errorstring
 ==>
 
 Expr(
-  VarDecl(let,VarName,String),
-  VarDecl(let,VarName,String),
-  VarDecl(let,VarName,String),
-  VarDecl(let,VarName,String, ⚠),
+  VarDecl(let,DefName,String),
+  VarDecl(let,DefName,String),
+  VarDecl(let,DefName,String),
+  VarDecl(let,DefName,String, ⚠),
   String)
 
 # Array literals
@@ -88,9 +88,9 @@ let s3 = ["hi", "hello", 228];
 ==>
 
 Expr(
-  VarDecl(let,VarName,Array()),
-  VarDecl(let,VarName,Array(String)),
-  VarDecl(let,VarName,Array(String, String, Number)))
+  VarDecl(let,DefName,Array()),
+  VarDecl(let,DefName,Array(String)),
+  VarDecl(let,DefName,Array(String, String, Number)))
 
 
 # Map literals
@@ -100,7 +100,7 @@ let s = {"hi": "hello", "bye": false, 1: []};
 ==>
 
 Expr(
-  VarDecl(let,VarName,Map(
+  VarDecl(let,DefName,Map(
     Pair(String, String),
     Pair(String, Bool),
     Pair(Number, Array())
