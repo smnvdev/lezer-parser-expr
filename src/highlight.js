@@ -16,8 +16,8 @@ export const exprHighlighting = styleTags({
 
   FieldName: t.propertyName,
   VarName: t.variableName,
-  VarDecl: t.definition(t.variableName),
-  "CallExpr/VariableName": t.function(t.variableName),
+  DefName: t.definition(t.variableName),
+  "CallExpr/VarName CallExpr/*/FieldName": t.function(t.variableName),
 
   LineComment: t.lineComment,
   BlockComment: t.blockComment,

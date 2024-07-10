@@ -8,7 +8,9 @@ Expr(CallExpr(VarName, Arguments(String)))
 
 # Call with predicate expression
 
-filter(0..9, {# % 2 == 0})
+filter(0..9, {
+  # % 2 == 0
+})
 
 ==>
 
@@ -17,7 +19,7 @@ Expr(
     VarName,
     Arguments(
       RangeExpr(Number, Number),
-      Predicate(
+      Block(
         BinaryExpr(
           BinaryExpr(Pointer, ArithmeticOp, Number),
           CompareOp,
@@ -62,7 +64,7 @@ Expr(
     VarName,
     Arguments(
       VarName,
-      Predicate(
+      Block(
         BinaryExpr(
           CallExpr(
             VarName,
@@ -78,7 +80,7 @@ Expr(
 
 # Call without predicate
 
-filter(tweets, len(.Content) > 240)
+filter(tweets, let content = .Content; len(content) > 240)
 
 ==>
 
@@ -87,13 +89,13 @@ Expr(
     VarName,
     Arguments(
       VarName,
-      BinaryExpr(
-        CallExpr(
-          VarName,
-          Arguments(PointerSelectorExpr(FieldName))
-        ),
-        CompareOp,
-        Number
+      Predicate(
+        VarDecl(let, DefName, PointerSelectorExpr(FieldName)),
+        BinaryExpr(
+          CallExpr(VarName, Arguments(VarName)),
+          CompareOp,
+          Number
+        )
       )
     )
   )
@@ -120,6 +122,71 @@ Expr(
         Pointer
       ),
       Number
+    )
+  )
+)
+
+# Call sum of functions
+
+float(.Passengers.Adults) + float(.Passengers.Children)
+
+==>
+
+Expr(
+  BinaryExpr(
+    CallExpr(
+      VarName,
+      Arguments(SelectorExpr(PointerSelectorExpr(FieldName), FieldName))
+    ),
+    ArithmeticOp,
+    CallExpr(
+      VarName,
+      Arguments(SelectorExpr(PointerSelectorExpr(FieldName), FieldName))
+    )
+  )
+)
+
+# Call method of object
+
+sum(Flights, .Durations.Seconds())
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      VarName,
+      CallExpr(
+        SelectorExpr(PointerSelectorExpr(FieldName), FieldName),
+        Arguments()
+      )
+    )
+  )
+)
+
+# Call method with array
+
+count([hour not in 3..7, hour in 4..6])
+
+==>
+
+Expr(
+  CallExpr(
+    VarName,
+    Arguments(
+      Array(
+        BinaryExpr(
+          VarName,
+          CompareOp(not, in),
+          RangeExpr(Number, Number)
+        ),
+        BinaryExpr(
+          VarName,
+          CompareOp(in),
+          RangeExpr(Number, Number)
+        )
+      )
     )
   )
 )

@@ -1,18 +1,19 @@
 @precedence {
   unary
+
+  range @right
+  dot
+  index
+  slice
+  call
+
   mult @left
   add @left
   compare @left
   and @left
   or @left
-  range @left
 
-  dot
-  index
-  slice
-
-  call
-  pipe
+  pipe @left
   ternary @right
 }
 
@@ -26,7 +27,7 @@ FieldName { identifier ~identifier }
 
 VarDecl { kw<"let"> DefName "=" expr ";" }
 
-expr {
+expr[@isGroup=Expr] {
   Number |
   String |
   Bool { @specialize<identifier, "true" | "false"> } |
@@ -44,9 +45,9 @@ expr {
   Array { "[" commaSep<expr> "]" } |
   Map { "{" commaSep<Pair> "}" } |
 
-  IndexExpr { expr !index ~bracket "[" expr "]" } |
-  SliceExpr { expr !slice ~bracket "[" expr? ":" expr? "]" } |
-  RangeExpr { expr !range ~range range expr } |
+  IndexExpr { expr !index "[" expr "]" } |
+  SliceExpr { expr !slice "[" expr? ":" expr? "]" } |
+  RangeExpr { expr !range range expr } |
 
   CallExpr  { expr !call Arguments } |
   PipeExpr  { expr !pipe ~pipe "|" expr } |
@@ -57,25 +58,30 @@ expr {
     expr !add ArithmeticOp<"+" | "-"> expr |
     expr !compare CompareOp<
       "==" | "!=" | "<" | "<=" | ">" | ">=" |
-      kw<"in"> | kw<"contains"> | kw<"startsWith"> | kw<"endsWith"> | kw<"matches">
+      kw<"in"> | kw<"not"> kw<"in"> |
+      kw<"contains"> | kw<"not"> kw<"contains"> |
+      kw<"startsWith"> |  kw<"not"> kw<"startsWith"> |
+      kw<"endsWith"> |  kw<"not"> kw<"endsWith"> |
+      kw<"matches"> | kw<"not"> kw<"matches">
     > expr |
     expr !and LogicOp<"&&" | kw<"and">> expr |
     expr !or LogicOp<"||" | "??" | kw<"or">> expr
   } |
 
-  ConditionalExpr { expr !ternary "?" expr LogicOp<":"> expr }
+  ConditionalExpr { expr !ternary "?" expr ":" expr }
 }
 
 ParenthesizedExpr { "(" expr ")" }
 
 Pair { (String | Number | FieldName | ParenthesizedExpr) ":" expr }
 
-Arguments { "(" commaSep<expr | Predicate> ")" }
-Predicate { "{" VarDecl* expr "}" }
+Arguments { "(" commaSep<expr | Block<expr> | Predicate | Block<Predicate>> ")"  }
+Predicate[@isGroup=Expression] { VarDecl+ expr }
+Block[@isGroup=Expr]<expr> { "{" expr "}" }
 
 kw<term> { @specialize[@name={term}]<identifier, term> }
 
-commaSep<expr> { (expr ("," expr)*)? ","? }
+commaSep<expr> { (expr ~ids ("," expr ~ids)*)? ","? }
 
 LogicOp<expr> { expr }
 ArithmeticOp<expr> { expr }
