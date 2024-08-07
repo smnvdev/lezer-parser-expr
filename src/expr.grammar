@@ -1,7 +1,7 @@
 @precedence {
   unary
 
-  range @right
+  range @left
   dot
   index
   slice
@@ -28,7 +28,7 @@ FieldName { identifier ~identifier }
 VarDecl { kw<"let"> DefName "=" expr ";" }
 
 expr[@isGroup=Expr] {
-  Number |
+  Integer | Float |
   String |
   Bool { @specialize<identifier, "true" | "false"> } |
   Nil { kw<"nil"> } |
@@ -45,9 +45,9 @@ expr[@isGroup=Expr] {
   Array { "[" commaSep<expr> "]" } |
   Map { "{" commaSep<Pair> "}" } |
 
-  IndexExpr { expr !index "[" expr "]" } |
+  IndexExpr { expr !index "[" expr? "]" } |
   SliceExpr { expr !slice "[" expr? ":" expr? "]" } |
-  RangeExpr { expr !range range expr } |
+  RangeExpr { expr !range ".." expr } |
 
   CallExpr  { expr !call Arguments } |
   PipeExpr  { expr !pipe ~pipe "|" expr } |
@@ -73,19 +73,19 @@ expr[@isGroup=Expr] {
 
 ParenthesizedExpr { "(" expr ")" }
 
-Pair { (String | Number | FieldName | ParenthesizedExpr) ":" expr }
+Pair { (String | Integer | Float | FieldName | ParenthesizedExpr) ":" expr }
 
 Arguments { "(" commaSep<expr | Block<expr> | Predicate | Block<Predicate>> ")"  }
-Predicate[@isGroup=Expression] { VarDecl+ expr }
+Predicate[@isGroup=Expr] { VarDecl+ expr }
 Block[@isGroup=Expr]<expr> { "{" expr "}" }
 
 kw<term> { @specialize[@name={term}]<identifier, term> }
 
 commaSep<expr> { (expr ~ids ("," expr ~ids)*)? ","? }
 
-LogicOp<expr> { expr }
-ArithmeticOp<expr> { expr }
-CompareOp<expr> { expr }
+LogicOp[@isGroup=Op]<expr> { expr }
+ArithmeticOp[@isGroup=Op]<expr> { expr }
+CompareOp[@isGroup=Op]<expr> { expr }
 
 @local tokens {
   blockCommentEnd { "*/" }
@@ -97,21 +97,12 @@ CompareOp<expr> { expr }
   BlockComment[isolate] { "/*" (blockCommentContent | blockCommentNewline)* blockCommentEnd }
 }
 
-
-@external tokens operatorToken from "./tokens.js" { range }
+@external tokens floatTokens from "./tokens" { Float }
 
 @tokens {
   space { $[ \t\n\r]+ }
   LineComment[isolate] { "//" ![\n]* }
   @precedence { LineComment "/" }
-
-  digits { @digit ("_"? @digit)* }
-
-  decimalNumber { ("." digits | digits ("." digits?)?) ($[eE] $[+-]? digits)? }
-  hexNumber { "0" $[xX] ("_"? (@digit | $[a-fA-F]))+ }
-  octNumber { "0" $[oO] ("_"? $[0-7])+ }
-  binNumber { "0" $[bB] ("_"? $[01])+ }
-  Number { (decimalNumber | hexNumber | octNumber | binNumber) }
 
   String[isolate] {
     "'" ("\\" _ | ![\\'\n])* "'"? |
@@ -119,13 +110,17 @@ CompareOp<expr> { expr }
     '`' ![`]* '`'
   }
 
-  letter { $[_a-zA-Z\u{a1}-\u{10ffff}] }
+  Integer {
+    @digit ("_"? @digit)* |
+    "0" $[bB] ("_"? $[01])+ |
+    "0" $[oO] ("_"? $[0-7])+ |
+    "0" $[xX] ("_"? (@digit | $[a-fA-F]))+
+  }
+
+  letter {  @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
   identifier { letter (letter | @digit)* }
 
   Pointer { "#" identifier? }
-
-  @precedence { Number identifier }
-  @precedence { Number "." }
 
   "=" ";" ":" ".." "." "?." "," "~" "|"
   "(" ")"

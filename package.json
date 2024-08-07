@@ -1,6 +1,6 @@
 {
   "name": "@exprlang/parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Lezer-based Expr grammar",
   "main": "dist/index.cjs",
   "type": "module",
@@ -32,5 +32,13 @@
     "build-debug": "lezer-generator src/expr.grammar --names -o src/parser && rollup -c",
     "prepare": "npm run build",
     "test": "npm run build && mocha test/test-*.js"
-  }
+  },
+  "keywords": [
+    "lezer",
+    "codemirror",
+    "expr",
+    "expr-lang",
+    "expr grammar",
+    "expr editor"
+  ]
 }

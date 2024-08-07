@@ -18,12 +18,12 @@ Expr(
   CallExpr(
     VarName,
     Arguments(
-      RangeExpr(Number, Number),
+      RangeExpr(Integer, Integer),
       Block(
         BinaryExpr(
-          BinaryExpr(Pointer, ArithmeticOp, Number),
+          BinaryExpr(Pointer, ArithmeticOp, Integer),
           CompareOp,
-          Number
+          Integer
         )
       )
     )
@@ -71,7 +71,7 @@ Expr(
             Arguments(PointerSelectorExpr(FieldName))
           ),
           CompareOp,
-          Number
+          Integer
         )
       )
     )
@@ -94,7 +94,7 @@ Expr(
         BinaryExpr(
           CallExpr(VarName, Arguments(VarName)),
           CompareOp,
-          Number
+          Integer
         )
       )
     )
@@ -111,7 +111,7 @@ Expr(
   CallExpr(
     VarName,
     Arguments(
-      RangeExpr(Number, Number),
+      RangeExpr(Integer, Integer),
       BinaryExpr(
         BinaryExpr(
           Pointer,
@@ -121,7 +121,7 @@ Expr(
         ArithmeticOp,
         Pointer
       ),
-      Number
+      Integer
     )
   )
 )
@@ -179,14 +179,22 @@ Expr(
         BinaryExpr(
           VarName,
           CompareOp(not, in),
-          RangeExpr(Number, Number)
+          RangeExpr(Integer, Integer)
         ),
         BinaryExpr(
           VarName,
           CompareOp(in),
-          RangeExpr(Number, Number)
+          RangeExpr(Integer, Integer)
         )
       )
     )
   )
 )
+
+# Call method with array and predicate
+
+1..a
+
+==>
+
+Expr(RangeExpr(Integer, VarName))

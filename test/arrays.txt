@@ -28,7 +28,7 @@ Expr(Array(String))
 
 Expr(Array(
   String,
-  Number,
+  Float,
   Bool,
   Map(),
   Array(String, String)))

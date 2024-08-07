@@ -1,9 +1,10 @@
-import {styleTags, tags as t} from "@lezer/highlight"
+import { styleTags, tags as t } from "@lezer/highlight";
 
 export const exprHighlighting = styleTags({
   "let": t.definitionKeyword,
 
-  Number: t.number,
+  Integer: t.integer,
+  Float: t.float,
   String: t.string,
   Bool: t.bool,
   Nil: t.null,
@@ -16,18 +17,19 @@ export const exprHighlighting = styleTags({
 
   FieldName: t.propertyName,
   VarName: t.variableName,
-  DefName: t.definition(t.variableName),
-  "CallExpr/VarName CallExpr/*/FieldName": t.function(t.variableName),
+  DefName: t.local(t.variableName),
+  "PointerSelectorExpr/.": t.derefOperator,
+  "CallExpr/VarName": t.function(t.variableName),
+  "CallExpr/*/FieldName": t.function(t.propertyName),
 
   LineComment: t.lineComment,
   BlockComment: t.blockComment,
 
   Pointer: t.atom,
 
-  ". ?.": t.derefOperator,
   "=": t.definitionOperator,
   "; ,": t.separator,
-  ".. :": t.punctuation,
+  ". ?. .. :": t.punctuation,
   "( )": t.paren,
   "[ ]": t.squareBracket,
   "{ }": t.brace,

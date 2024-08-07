@@ -21,13 +21,13 @@ Expr(String, String)
 ==>
 
 Expr(
-  BinaryExpr(Number,ArithmeticOp,Number),
-  BinaryExpr(Number,ArithmeticOp,Number),
-  BinaryExpr(Number,ArithmeticOp,Number),
-  BinaryExpr(Number,ArithmeticOp,Number),
-  BinaryExpr(Number,ArithmeticOp,Number),
-  BinaryExpr(Number,ArithmeticOp,Number),
-  BinaryExpr(Number,ArithmeticOp,Number),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
+  BinaryExpr(Integer,ArithmeticOp,Integer),
 )
 
 # Operators • Comparison
@@ -42,12 +42,12 @@ Expr(
 ==>
 
 Expr(
-  BinaryExpr(Number,CompareOp,Number),
-  BinaryExpr(Number,CompareOp,Number),
-  BinaryExpr(Number,CompareOp,Number),
-  BinaryExpr(Number,CompareOp,Number),
-  BinaryExpr(Number,CompareOp,Number),
-  BinaryExpr(Number,CompareOp,Number)
+  BinaryExpr(Integer,CompareOp,Integer),
+  BinaryExpr(Integer,CompareOp,Integer),
+  BinaryExpr(Integer,CompareOp,Integer),
+  BinaryExpr(Integer,CompareOp,Integer),
+  BinaryExpr(Integer,CompareOp,Integer),
+  BinaryExpr(Integer,CompareOp,Integer)
 )
 
 # Operators • Logical
@@ -121,31 +121,6 @@ array[-1]
 "name" in {"name": "John", "age": 30}
 
 author.User?.Name
-
-==>
-
-Expr(
-  SelectorExpr(VarName, FieldName),
-  IndexExpr(VarName, String),
-  IndexExpr(VarName, Number),
-  IndexExpr(VarName, UnaryExpr(ArithmeticOp,Number)),
-  BinaryExpr(String, CompareOp(in), Array(String, String)),
-  BinaryExpr(String, CompareOp(in), Map(Pair(String, String), Pair(String, Number))),
-  OptionalSelectorExpr(SelectorExpr(VarName, FieldName), FieldName)
-)
-
-# Operators • Membership Operator
-
-user.Name
-user["Name"]
-
-array[0]
-array[-1]
-
-"John" in ["John", "Jane"]
-"name" in {"name": "John", "age": 30}
-
-author.User?.Name
 author.User?.Name ?? "Anonymous"
 
 ==>
@@ -153,10 +128,10 @@ author.User?.Name ?? "Anonymous"
 Expr(
   SelectorExpr(VarName, FieldName),
   IndexExpr(VarName, String),
-  IndexExpr(VarName, Number),
-  IndexExpr(VarName, UnaryExpr(ArithmeticOp,Number)),
+  IndexExpr(VarName, Integer),
+  IndexExpr(VarName, UnaryExpr(ArithmeticOp,Integer)),
   BinaryExpr(String, CompareOp(in), Array(String, String)),
-  BinaryExpr(String, CompareOp(in), Map(Pair(String, String), Pair(String, Number))),
+  BinaryExpr(String, CompareOp(in), Map(Pair(String, String), Pair(String, Integer))),
   OptionalSelectorExpr(SelectorExpr(VarName, FieldName), FieldName),
   BinaryExpr(
      OptionalSelectorExpr(SelectorExpr(VarName, FieldName), FieldName),
@@ -176,10 +151,10 @@ array[:] == array
 ==>
 
 Expr(
-  BinaryExpr(SliceExpr(VarName, Number, Number),  CompareOp, Array(Number, Number, Number)),
-  BinaryExpr(SliceExpr(VarName, Number, UnaryExpr(ArithmeticOp, Number)),  CompareOp, Array(Number, Number, Number)),
-  BinaryExpr(SliceExpr(VarName, Number), CompareOp, Array(Number, Number, Number)),
-  BinaryExpr(SliceExpr(VarName, Number), CompareOp, Array(Number, Number)),
+  BinaryExpr(SliceExpr(VarName, Integer, Integer),  CompareOp, Array(Integer, Integer, Integer)),
+  BinaryExpr(SliceExpr(VarName, Integer, UnaryExpr(ArithmeticOp, Integer)),  CompareOp, Array(Integer, Integer, Integer)),
+  BinaryExpr(SliceExpr(VarName, Integer), CompareOp, Array(Integer, Integer, Integer)),
+  BinaryExpr(SliceExpr(VarName, Integer), CompareOp, Array(Integer, Integer)),
   BinaryExpr(SliceExpr(VarName), CompareOp, VarName)
 )
 
@@ -205,7 +180,7 @@ Expr(
 
 ==>
 
-Expr(BinaryExpr(RangeExpr(Number, Number), CompareOp, Array(Number, Number, Number)))
+Expr(BinaryExpr(RangeExpr(Integer, Integer), CompareOp, Array(Integer, Integer, Integer)))
 
 # Variables • Inline
 
@@ -213,7 +188,7 @@ let x = 42; x * 2
 
 ==>
 
-Expr(VarDecl(let, DefName, Number), BinaryExpr(VarName, ArithmeticOp, Number))
+Expr(VarDecl(let, DefName, Integer), BinaryExpr(VarName, ArithmeticOp, Integer))
 
 # Variables
 
@@ -224,8 +199,8 @@ x * y
 ==>
 
 Expr(
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
   BinaryExpr(VarName, ArithmeticOp, VarName),
 )
 
@@ -249,7 +224,7 @@ Expr(
     )
   ),
   BinaryExpr(
-    BinaryExpr(String, ArithmeticOp, IndexExpr(VarName, Number)),
+    BinaryExpr(String, ArithmeticOp, IndexExpr(VarName, Integer)),
     ArithmeticOp,
     String
   )
@@ -271,12 +246,12 @@ Expr(
   CallExpr(
     VarName,
     Arguments(
-      RangeExpr(Number, Number),
+      RangeExpr(Integer, Integer),
       Block(
         BinaryExpr(
-          BinaryExpr(Pointer, ArithmeticOp, Number),
+          BinaryExpr(Pointer, ArithmeticOp, Integer),
           CompareOp,
-          Number
+          Integer
         )
       )
     )
@@ -289,7 +264,7 @@ Expr(
         BinaryExpr(
           CallExpr(VarName, Arguments(PointerSelectorExpr(FieldName))),
           CompareOp,
-          Number
+          Integer
         )
       )
     )
@@ -301,7 +276,7 @@ Expr(
       BinaryExpr(
         CallExpr(VarName, Arguments(PointerSelectorExpr(FieldName))),
         CompareOp,
-        Number
+        Integer
       )
     )
   )

@@ -14,14 +14,14 @@ Expr(Map())
 
 ==>
 
-Expr(Map(Pair(String,Number)))
+Expr(Map(Pair(String,Integer)))
 
 # Multiple Properties
 
 {
   "foo": 123,
-  "bar": "I'm a bar!",
-  "obj": {},
+  'bar': "I'm a bar!",
+  `obj`: {},
   "arr": [1, 2, 3],
   1: 1,
   1.2: 1.2,
@@ -31,11 +31,11 @@ Expr(Map(Pair(String,Number)))
 ==>
 
 Expr(Map(
-  Pair(String, Number),
+  Pair(String, Integer),
   Pair(String, String),
   Pair(String, Map()),
-  Pair(String, Array(Number, Number, Number)),
-  Pair(Number, Number),
-  Pair(Number, Number),
-  Pair(FieldName, Number)
+  Pair(String, Array(Integer, Integer, Integer)),
+  Pair(Integer, Integer),
+  Pair(Float, Float),
+  Pair(FieldName, Integer)
 ))

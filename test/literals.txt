@@ -17,17 +17,17 @@ nil
 ==>
 
 Expr(
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
-  VarDecl(let, DefName, Number),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
+  VarDecl(let, DefName, Integer),
   Nil(nil))
 
 # Float literals
@@ -49,17 +49,17 @@ nil
 ==>
 
 Expr(
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
-  VarDecl(let,DefName,Number),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
+  VarDecl(let,DefName,Float),
   Nil(nil))
 
 # String literals
@@ -88,9 +88,9 @@ let s3 = ["hi", "hello", 228];
 ==>
 
 Expr(
-  VarDecl(let,DefName,Array()),
-  VarDecl(let,DefName,Array(String)),
-  VarDecl(let,DefName,Array(String, String, Number)))
+  VarDecl(let, DefName, Array()),
+  VarDecl(let, DefName, Array(String)),
+  VarDecl(let, DefName, Array(String, String, Integer)))
 
 
 # Map literals
@@ -103,6 +103,6 @@ Expr(
   VarDecl(let,DefName,Map(
     Pair(String, String),
     Pair(String, Bool),
-    Pair(Number, Array())
+    Pair(Integer, Array())
   )))
 
