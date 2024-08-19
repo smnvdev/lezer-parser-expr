@@ -1,6 +1,6 @@
 {
   "name": "@exprlang/parser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Lezer-based Expr grammar",
   "main": "dist/index.cjs",
   "type": "module",

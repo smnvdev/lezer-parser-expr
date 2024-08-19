@@ -12,6 +12,7 @@
   compare @left
   and @left
   or @left
+  contains @left
 
   pipe @left
   ternary @right
@@ -56,16 +57,16 @@ expr[@isGroup=Expr] {
   BinaryExpr {
     expr !mult ArithmeticOp<"*" | "/" | "%" | "^" | "**"> expr |
     expr !add ArithmeticOp<"+" | "-"> expr |
-    expr !compare CompareOp<
-      "==" | "!=" | "<" | "<=" | ">" | ">=" |
+    expr !compare CompareOp<"==" | "!=" | "<" | "<=" | ">" | ">="> expr |
+    expr !and LogicOp<"&&" | kw<"and">> expr |
+    expr !or LogicOp<"||" | "??" | kw<"or">> expr |
+    expr !contains LogicOp<
       kw<"in"> | kw<"not"> kw<"in"> |
       kw<"contains"> | kw<"not"> kw<"contains"> |
       kw<"startsWith"> |  kw<"not"> kw<"startsWith"> |
       kw<"endsWith"> |  kw<"not"> kw<"endsWith"> |
       kw<"matches"> | kw<"not"> kw<"matches">
-    > expr |
-    expr !and LogicOp<"&&" | kw<"and">> expr |
-    expr !or LogicOp<"||" | "??" | kw<"or">> expr
+    > expr
   } |
 
   ConditionalExpr { expr !ternary "?" expr ":" expr }

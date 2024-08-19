@@ -1,9 +1,10 @@
-import {parser} from '../dist/index.js'
-import {fileTests} from '@lezer/generator/dist/test'
+import { parser } from "../dist/index.js";
+import { fileTests } from "@lezer/generator/dist/test";
 
-import fs from 'fs'
-import path from 'path'
-import {fileURLToPath} from "url"
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
 let caseDir = path.dirname(fileURLToPath(import.meta.url))
 
 for (let file of fs.readdirSync(caseDir)) {

@@ -103,10 +103,10 @@ Expr(
 
 Expr(
   BinaryExpr(String, ArithmeticOp, String),
-  BinaryExpr(String, CompareOp(contains), String),
-  BinaryExpr(String, CompareOp(startsWith), String),
-  BinaryExpr(String, CompareOp(endsWith), String),
-  BinaryExpr(String, CompareOp(matches), String)
+  BinaryExpr(String, LogicOp(contains), String),
+  BinaryExpr(String, LogicOp(startsWith), String),
+  BinaryExpr(String, LogicOp(endsWith), String),
+  BinaryExpr(String, LogicOp(matches), String)
 )
 
 # Operators • Membership Operator
@@ -130,8 +130,8 @@ Expr(
   IndexExpr(VarName, String),
   IndexExpr(VarName, Integer),
   IndexExpr(VarName, UnaryExpr(ArithmeticOp,Integer)),
-  BinaryExpr(String, CompareOp(in), Array(String, String)),
-  BinaryExpr(String, CompareOp(in), Map(Pair(String, String), Pair(String, Integer))),
+  BinaryExpr(String, LogicOp(in), Array(String, String)),
+  BinaryExpr(String, LogicOp(in), Map(Pair(String, String), Pair(String, Integer))),
   OptionalSelectorExpr(SelectorExpr(VarName, FieldName), FieldName),
   BinaryExpr(
      OptionalSelectorExpr(SelectorExpr(VarName, FieldName), FieldName),
@@ -302,4 +302,49 @@ Expr(
       )
     )
   ),
+)
+
+# Simple Example
+
+users[0].Profile.Address
+
+==>
+
+Expr(SelectorExpr(SelectorExpr(IndexExpr(VarName, Integer), FieldName), FieldName))
+
+
+# Complex Example
+
+// Find orders with TotalAmount does not equal sum of products.
+filter(orders, sum(.Products, .Price) != .TotalAmount) | map(.OrderId)
+
+==>
+
+Expr(
+  LineComment,
+  PipeExpr(
+    CallExpr(
+      VarName,
+      Arguments(
+        VarName,
+        BinaryExpr(
+          CallExpr(
+            VarName,
+            Arguments(
+              PointerSelectorExpr(FieldName),
+              PointerSelectorExpr(FieldName)
+            )
+          ),
+          CompareOp,
+          PointerSelectorExpr(FieldName)
+        )
+      )
+    ),
+    CallExpr(
+      VarName,
+      Arguments(
+        PointerSelectorExpr(FieldName)
+      )
+    )
+  )
 )

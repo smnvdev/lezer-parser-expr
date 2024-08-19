@@ -178,12 +178,12 @@ Expr(
       Array(
         BinaryExpr(
           VarName,
-          CompareOp(not, in),
+          LogicOp(not, in),
           RangeExpr(Integer, Integer)
         ),
         BinaryExpr(
           VarName,
-          CompareOp(in),
+          LogicOp(in),
           RangeExpr(Integer, Integer)
         )
       )
