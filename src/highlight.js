@@ -2,12 +2,12 @@ import { styleTags, tags as t } from "@lezer/highlight";
 
 export const exprHighlighting = styleTags({
   "let": t.definitionKeyword,
+  "nil": t.null,
 
   Integer: t.integer,
   Float: t.float,
   String: t.string,
   Bool: t.bool,
-  Nil: t.null,
 
   "and or not in contains startsWith endsWith matches": t.operatorKeyword,
   LogicOp: t.logicOperator,
